@@ -9,6 +9,8 @@ inputs:
   files:
     description: Array of all changed files to validate, encoded as a JSON array
     required: true
+  prefix:
+    description: Prefix for filtering the list of workspaces
 
 outputs:
   targets:

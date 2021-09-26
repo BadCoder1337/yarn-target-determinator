@@ -2217,6 +2217,7 @@ const YarnGraph_1 = __importDefault(__nccwpck_require__(890));
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const files = JSON.parse(core.getInput("files", { required: true }));
+        const prefix = core.getInput("prefix") || "";
         core.info("Building worktree dependency graph");
         const graph = new YarnGraph_1.default(yield listYarnWorkspaces_1.default());
         core.startGroup("Identifying directly modified workspaces");
@@ -2224,7 +2225,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         core.endGroup();
         core.info(`Affected workspaces [${changedWorkspaces.join(", ")}]`);
         core.startGroup("Identifying dependent workspaces");
-        const targetWorkspaces = graph.getRecursiveDependents(...changedWorkspaces);
+        const targetWorkspaces = graph.getRecursiveDependents(...changedWorkspaces).filter(w => w.startsWith(prefix)).map(w => w.replace(prefix, ""));
         core.endGroup();
         core.info(`Target workspaces [${targetWorkspaces.join(", ")}]`);
         core.setOutput("targets", targetWorkspaces);

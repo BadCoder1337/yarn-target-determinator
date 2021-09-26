@@ -8,6 +8,7 @@ const main = async (): Promise<void> => {
     const files: string[] = JSON.parse(
       core.getInput("files", { required: true })
     );
+    const prefix = core.getInput("prefix") || ""
 
     core.info("Building worktree dependency graph");
     const graph = new YarnGraph(await listYarnWorkspaces());
@@ -18,7 +19,7 @@ const main = async (): Promise<void> => {
     core.info(`Affected workspaces [${changedWorkspaces.join(", ")}]`);
 
     core.startGroup("Identifying dependent workspaces");
-    const targetWorkspaces = graph.getRecursiveDependents(...changedWorkspaces);
+    const targetWorkspaces = graph.getRecursiveDependents(...changedWorkspaces).filter(w => w.startsWith(prefix)).map(w => w.replace(prefix, ""));
     core.endGroup();
     core.info(`Target workspaces [${targetWorkspaces.join(", ")}]`);
 
