@@ -9,7 +9,7 @@ export interface YarnWorkspacesListItem {
 const listYarnWorkspaces = async (): Promise<YarnWorkspacesListItem[]> => {
   const output: Buffer[] = [];
   await exec.exec("yarn workspaces", ["list", "-v", "--json"], {
-    silent: true,
+    silent: false,
     listeners: {
       stdout: (data) => {
         output.push(data);

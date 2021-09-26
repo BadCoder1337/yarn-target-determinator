@@ -2156,7 +2156,7 @@ const exec = __importStar(__nccwpck_require__(162));
 const listYarnWorkspaces = () => __awaiter(void 0, void 0, void 0, function* () {
     const output = [];
     yield exec.exec("yarn workspaces", ["list", "-v", "--json"], {
-        silent: true,
+        silent: false,
         listeners: {
             stdout: (data) => {
                 output.push(data);
