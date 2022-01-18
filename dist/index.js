@@ -2218,6 +2218,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const files = JSON.parse(core.getInput("files", { required: true }));
         const prefix = core.getInput("prefix") || "";
+        const payload = core.getInput("payload");
         core.info("Building worktree dependency graph");
         const graph = new YarnGraph_1.default(yield listYarnWorkspaces_1.default());
         core.startGroup("Identifying directly modified workspaces");
@@ -2225,9 +2226,12 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         core.endGroup();
         core.info(`Affected workspaces [${changedWorkspaces.join(", ")}]`);
         core.startGroup("Identifying dependent workspaces");
-        const targetWorkspaces = graph.getRecursiveDependents(...changedWorkspaces).filter(w => w.startsWith(prefix)).map(w => w.replace(prefix, ""));
+        let targetWorkspaces = graph.getRecursiveDependents(...changedWorkspaces).filter(w => w.startsWith(prefix)).map(w => w.replace(prefix, ""));
         core.endGroup();
-        core.info(`Target workspaces [${targetWorkspaces.join(", ")}]`);
+        if (payload) {
+            targetWorkspaces = JSON.parse(payload).filter((p) => targetWorkspaces.includes(p.package));
+        }
+        core.info(`Target workspaces [${JSON.stringify(targetWorkspaces)}]`);
         core.setOutput("targets", targetWorkspaces);
     }
     catch (err) {

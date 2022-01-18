@@ -2,20 +2,22 @@ name: Yarn Target Determinator
 description: Determine a list of Yarn 2 workspaces to test using a list of changed files.
 
 branding:
-  icon: target
-  color: red
+    icon: target
+    color: red
 
 inputs:
-  files:
-    description: Array of all changed files to validate, encoded as a JSON array
-    required: true
-  prefix:
-    description: Prefix for filtering the list of workspaces
+    files:
+        description: Array of all changed files to validate, encoded as a JSON array
+        required: true
+    prefix:
+        description: Prefix for filtering the list of workspaces
+    payload:
+        description: 'Additional arbitrary JSON payload which will be filtered and added to output - {"package": <package_name>, ...}[]'
 
 outputs:
-  targets:
-    description: The list of Yarn workspaces to test, encoded as a JSON array
+    targets:
+        description: The list of Yarn workspaces to test, encoded as a JSON array
 
 runs:
-  using: node12
-  main: dist/index.js
+    using: node12
+    main: dist/index.js
