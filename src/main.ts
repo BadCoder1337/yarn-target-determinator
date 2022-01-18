@@ -9,7 +9,7 @@ const main = async (): Promise<void> => {
       core.getInput("files", { required: true })
     );
     const prefix = core.getInput("prefix") || ""
-    const payload = core.getInput("payload")
+    let payload = core.getInput("payload")
 
     core.info("Building worktree dependency graph");
     const graph = new YarnGraph(await listYarnWorkspaces());
@@ -24,7 +24,10 @@ const main = async (): Promise<void> => {
     core.endGroup();
 
     if (payload) {
-      targetWorkspaces = JSON.parse(payload).filter((p: { package: string; }) => targetWorkspaces.includes(p.package))
+      core.info(`Given payload [${JSON.stringify(payload)}]`);
+      if (typeof payload === "string") payload = JSON.parse(payload)
+      if (!Array.isArray(payload)) return core.setFailed("Payload is not an array");
+      targetWorkspaces = payload.filter((p: { package: string; }) => targetWorkspaces.includes(p.package))
     }
 
     core.info(`Target workspaces [${JSON.stringify(targetWorkspaces)}]`);
