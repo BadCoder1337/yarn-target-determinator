@@ -2229,14 +2229,15 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         let targetWorkspaces = graph.getRecursiveDependents(...changedWorkspaces).filter(w => w.startsWith(prefix)).map(w => w.replace(prefix, ""));
         core.endGroup();
         if (payload) {
-            core.info(`Given payload [${JSON.stringify(payload)}]`);
+            core.info(`Given payload: ${JSON.stringify(payload)}`);
             if (typeof payload === "string")
                 payload = JSON.parse(payload);
             if (!Array.isArray(payload))
                 return core.setFailed("Payload is not an array");
+            core.info(`Raw targets: ${JSON.stringify(targetWorkspaces)}`);
             targetWorkspaces = payload.filter((p) => targetWorkspaces.includes(p.package));
         }
-        core.info(`Target workspaces [${JSON.stringify(targetWorkspaces)}]`);
+        core.info(`Target workspaces: ${JSON.stringify(targetWorkspaces)}`);
         core.setOutput("targets", targetWorkspaces);
     }
     catch (err) {
